@@ -1,0 +1,180 @@
+#ai的不用管
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>本地语音办公助手</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 650px;
+      margin: 60px auto;
+      padding: 20px;
+      line-height: 1.7;
+    }
+    button {
+      padding: 12px 20px;
+      margin-right: 10px;
+      cursor: pointer;
+    }
+    .result {
+      margin-top: 20px;
+      padding: 15px;
+      background: #f3f4f6;
+      border-radius: 8px;
+      white-space: pre-wrap;
+    }
+  </style>
+</head>
+
+<body>
+  <h2>语音办公助手</h2>
+
+  <p>点击开始录音，首次使用需要允许麦克风权限。</p>
+
+  <button id="startBtn">🎤 开始录音</button>
+  <button id="stopBtn" disabled>⏹ 停止录音</button>
+
+  <p id="status">状态：等待录音</p>
+
+  <div class="result">
+    <p>回复：<span id="text">暂无</span></p>
+  </div>
+
+  <script>
+    const startBtn = document.getElementById("startBtn");
+    const stopBtn = document.getElementById("stopBtn");
+    const statusEl = document.getElementById("status");
+    const textEl = document.getElementById("text");
+    const emotionEl = document.getElementById("emotion");
+
+    let stream = null;
+    let recorder = null;
+    let chunks = [];
+    let stopTimer = null;
+
+    function setStatus(message) {
+      statusEl.textContent = "状态：" + message;
+    }
+
+    // ========== 1. 开始录音 ==========
+    startBtn.onclick = async () => {
+      startBtn.disabled = true;
+
+      try {
+        if (!navigator.mediaDevices?.getUserMedia) {
+          throw new Error("当前页面不支持麦克风访问，请使用 localhost 或 HTTPS");
+        }
+
+        // 请求浏览器麦克风权限
+        stream = await navigator.mediaDevices.getUserMedia({
+          audio: true,
+          video: false
+        });
+
+        // 检查浏览器支持的录音格式
+        const formats = [
+          "audio/webm;codecs=opus",
+          "audio/ogg;codecs=opus",
+          "audio/mp4"
+        ];
+
+        const supported = formats.find(
+          type => MediaRecorder.isTypeSupported(type)
+        );
+
+        recorder = new MediaRecorder(
+          stream,
+          supported ? { mimeType: supported } : {}
+        );
+
+        chunks = [];
+
+        // 保存录制的音频片段
+        recorder.ondataavailable = event => {
+          if (event.data.size > 0) {
+            chunks.push(event.data);
+          }
+        };
+
+        // ========== 2. 录音停止 ==========
+        recorder.onstop = async () => {
+          clearTimeout(stopTimer);
+
+          // 释放麦克风
+          stream.getTracks().forEach(track => track.stop());
+
+          stopBtn.disabled = true;
+          setStatus("正在上传音频并进行识别...");
+
+          const type = recorder.mimeType || "audio/webm";
+          const blob = new Blob(chunks, { type });
+
+          if (!blob.size) {
+            setStatus("录音为空，请重试");
+            startBtn.disabled = false;
+            return;
+          }
+
+          const ext = type.includes("ogg") ? "ogg"
+                    : type.includes("mp4") ? "mp4"
+                    : "webm";
+
+          // ========== 3. 上传至Python后端 ==========
+          const formData = new FormData();
+          formData.append("file", blob, "recording." + ext);
+
+          try {
+            const response = await fetch("/recognize", {
+              method: "POST",
+              body: formData
+            });
+
+            if (!response.ok) {
+              throw new Error(await response.text());
+            }
+
+            const result = await response.json();
+
+            // ========== 4. 显示识别结果 ==========
+            textEl.textContent = result;
+            setStatus("识别完成");
+
+          } catch (err) {
+            setStatus("识别失败：" + err.message);
+          } finally {
+            startBtn.disabled = false;
+          }
+        };
+
+        recorder.start();
+        stopBtn.disabled = false;
+        setStatus("正在录音，请说话...");
+
+        // 演示版最多录制20秒
+        stopTimer = setTimeout(() => {
+          if (recorder.state === "recording") {
+            recorder.stop();
+          }
+        }, 20000);
+
+      } catch (err) {
+        if (stream) {
+          stream.getTracks().forEach(track => track.stop());
+        }
+        setStatus("无法录音：" + err.message);
+        startBtn.disabled = false;
+      }
+    };
+
+    // ========== 5. 手动停止录音 ==========
+    stopBtn.onclick = () => {
+      if (recorder && recorder.state === "recording") {
+        stopBtn.disabled = true;
+        recorder.stop();
+      }
+    };
+  </script>
+</body>
+</html>
