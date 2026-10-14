@@ -12,8 +12,9 @@ from funasr.utils.postprocess_utils import rich_transcription_postprocess
 
 app = FastAPI()
 
-MODEL_PATH = os.path.abspath("./models/SenseVoiceSmall")
-HTML_PATH = Path(__file__).with_name("index.html")
+BASE_DIR = Path(__file__).resolve().parent
+MODEL_PATH = BASE_DIR / "models" / "SenseVoiceSmall"
+HTML_PATH = BASE_DIR / "index.html"
 
 # 加载SenseVoiceSmall,默认使用CPU
 model = AutoModel(
@@ -121,8 +122,8 @@ async def recognize(file: UploadFile = File(...)):
 
 
         #将音频文件输入到模型中
-        response = client.chat.completions.create(
-            model='Qwen2.5-VL-3B-Instruct',
+        response = await client.chat.completions.create(
+            model='qwen',
             messages=[
                 {
                     "role": "system",
@@ -138,8 +139,8 @@ async def recognize(file: UploadFile = File(...)):
                 {
                     'role':'user',
                     'content':(
-                        f'语音文本:{voice_result['text']}\n'
-                        f'语音情绪标签:{voice_result['emotion']}\n'
+                        f"语音文本:{voice_result['text']}\n"
+                        f"语音情绪标签:{voice_result['emotion']}\n"
                         '理解并满足用户需求'
                     )
                 }
@@ -150,4 +151,8 @@ async def recognize(file: UploadFile = File(...)):
 
         model_result = response.choices[0].message.content
         
-        return model_result
+        return {
+            "text": text,
+            "emotion": emotion,
+            "reply": model_result
+        }

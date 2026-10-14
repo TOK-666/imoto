@@ -39,7 +39,17 @@
   <p id="status">状态：等待录音</p>
 
   <div class="result">
-    <p>回复：<span id="text">暂无</span></p>
+    <p>语音转写：
+      <span id="text">暂无</span>
+    </p>
+
+    <p>情绪识别：
+      <span id="emotion">暂无</span>
+    </p>
+
+    <p>大模型回复：
+      <span id="reply">暂无</span>
+    </p>
   </div>
 
   <script>
@@ -138,7 +148,10 @@
             const result = await response.json();
 
             // ========== 4. 显示识别结果 ==========
-            textEl.textContent = result;
+            textEl.textContent = result.text;
+            emotionEl.textContent = result.emotion;
+            replyEl.textContent = result.reply;
+
             setStatus("识别完成");
 
           } catch (err) {
