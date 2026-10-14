@@ -57,6 +57,7 @@
     const statusEl = document.getElementById("status");
     const textEl = document.getElementById("text");
     const emotionEl = document.getElementById("emotion");
+    const replyEl = document.getElementById("reply");
 
     let stream = null;
     let recorder = null;
@@ -154,8 +155,9 @@
             setStatus("识别完成");
 
           } catch (err) {
-            setStatus("识别失败：" + err.message);
-          } finally {
+              console.error("处理错误：", err);
+              setStatus("处理失败：" + err.message);
+            } finally {
             startBtn.disabled = false;
           }
         };

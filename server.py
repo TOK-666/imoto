@@ -4,7 +4,7 @@ import re
 import tempfile
 import subprocess
 from pathlib import Path
-from openai import OpenAI
+from openai import AsyncOpenAI
 from fastapi import FastAPI, UploadFile, File, HTTPException
 from fastapi.responses import FileResponse
 from funasr import AutoModel
@@ -33,6 +33,12 @@ EMOTIONS = {
     "SURPRISED": "惊讶",
 }
 
+#api链接本地vllm启动的模型
+client = AsyncOpenAI(
+    base_url="http://127.0.0.1:8000/v1",
+    api_key="EMPTY",
+    timeout=120.0
+)
 
 # ========== 2. 提供浏览器页面 ==========
 @app.get("/")
@@ -113,12 +119,6 @@ async def recognize(file: UploadFile = File(...)):
             "text": text,
             "emotion": emotion
         }
-
-        #api链接本地vllm启动的模型
-        client = OpenAI(
-            base_url="http://127.0.0.1:8000/v1",
-            api_key='EMPTY'
-        )
 
 
         #将音频文件输入到模型中
