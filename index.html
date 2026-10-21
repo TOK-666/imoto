@@ -3,192 +3,482 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>本地语音办公助手</title>
+  <meta name="theme-color" content="#f6f5f9">
+  <title>imoto · 本地办公助手</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      max-width: 650px;
-      margin: 60px auto;
-      padding: 20px;
-      line-height: 1.7;
+    :root { color-scheme: light; --bg: #f6f5f9; --ink: #282438; --muted: #787386; --line: #e9e6ef; --purple: #7152c8; --purple-dark: #5c3eaf; --purple-soft: #f0eafa; --green: #367d66; }
+    * { box-sizing: border-box; }
+    [hidden] { display: none !important; }
+    body { margin: 0; min-height: 100vh; background: radial-gradient(ellipse at 90% 0%, #ede7f8 0, transparent 40%), var(--bg); color: var(--ink); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif; font-size: 14px; line-height: 1.6; }
+    button, textarea, input { font: inherit; }
+    button { cursor: pointer; }
+    button:disabled { cursor: not-allowed; opacity: .45; }
+    button, .upload-zone, textarea { transition: background .18s, border-color .18s, box-shadow .18s; }
+    button:focus-visible, audio:focus-visible { outline: 3px solid #b29ae6; outline-offset: 4px; }
+    .icon { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
+    .shell { max-width: 1180px; margin: 0 auto; padding: 0 40px; }
+    .topbar { height: 94px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--line); }
+    .brand { display: flex; align-items: center; gap: 12px; }
+    .brand-mark { display: grid; place-items: center; width: 38px; height: 38px; border-radius: 13px; background: var(--purple); color: white; }
+    .brand-name { font-size: 24px; font-weight: 750; letter-spacing: -1px; }
+    .brand-caption { color: var(--muted); margin-left: 8px; padding-left: 18px; border-left: 1px solid #d9d4e1; font-size: 12px; }
+    .local-badge { display: flex; align-items: center; gap: 7px; color: var(--green); background: #eaf2ee; padding: 5px 12px; border-radius: 30px; font-size: 12px; }
+    .local-badge .icon { width: 14px; height: 14px; }
+    .intro { padding: 44px 0 30px; }
+    .eyebrow { font-size: 11px; letter-spacing: 2.5px; font-weight: 650; color: var(--purple); margin: 0 0 10px; }
+    h1 { font-size: clamp(25px, 3.2vw, 36px); line-height: 1.4; letter-spacing: -1px; margin: 0 0 10px; font-weight: 650; }
+    h1 span { color: var(--purple); }
+    .intro p:last-child { color: var(--muted); margin: 0; }
+    .workspace { display: grid; grid-template-columns: 1.08fr 1fr; align-items: start; gap: 24px; }
+    .card { min-width: 0; border: 1px solid var(--line); background: #fff; border-radius: 22px; box-shadow: 0 8px 30px #33215e05; overflow: hidden; }
+    .card-header { display: flex; align-items: center; justify-content: space-between; padding: 23px 26px; border-bottom: 1px solid #f0edf4; }
+    .title-group { display: flex; align-items: center; gap: 10px; }
+    .step { display: grid; place-items: center; width: 27px; height: 27px; background: var(--purple-soft); color: var(--purple); border-radius: 9px; font-size: 11px; font-weight: 700; }
+    h2 { font-size: 16px; font-weight: 650; margin: 0; }
+    .card-caption { font-size: 11px; color: var(--muted); }
+    .composer { padding: 24px 26px 25px; }
+    .field-header { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 10px; }
+    .field-label { font-size: 13px; font-weight: 600; }
+    .optional { font-weight: 400; font-size: 11px; color: var(--muted); margin-left: 7px; }
+    .counter { color: var(--muted); font-size: 11px; font-variant-numeric: tabular-nums; }
+    textarea { width: 100%; min-height: 125px; resize: vertical; border: 1px solid var(--line); background: #fbfafc; border-radius: 12px; padding: 14px 16px; color: var(--ink); outline: none; line-height: 1.8; }
+    textarea::placeholder { color: #a29caa; }
+    textarea:focus { border-color: #b29ae6; box-shadow: 0 0 0 3px #7152c80b; background: #fff; }
+    .field + .field { margin-top: 22px; }
+    .upload-zone { position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 132px; padding: 18px; border: 1px dashed #cfc5e0; border-radius: 12px; background: #fcfaff; cursor: pointer; text-align: center; }
+    .upload-zone:hover, .upload-zone.dragging { border-color: var(--purple); background: var(--purple-soft); }
+    .upload-zone:focus-within { outline: 3px solid #b29ae6; outline-offset: 3px; }
+    .upload-zone.disabled { opacity: .5; cursor: not-allowed; }
+    .upload-zone input { position: absolute; width: 1px; height: 1px; opacity: 0; }
+    .upload-icon { display: grid; place-items: center; width: 35px; height: 35px; color: var(--purple); margin-bottom: 6px; }
+    .upload-title { font-size: 13px; font-weight: 500; }
+    .upload-title strong { color: var(--purple); font-weight: 600; }
+    .upload-hint { color: var(--muted); font-size: 11px; margin-top: 4px; }
+    .image-preview { border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: #f8f7fb; }
+    .image-preview img { display: block; width: 100%; height: 170px; object-fit: contain; padding: 8px; }
+    .file-info { display: flex; align-items: center; gap: 10px; padding: 10px 12px; background: #fff; border-top: 1px solid var(--line); }
+    .file-meta { flex: 1; min-width: 0; }
+    .file-name { display: block; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; font-size: 12px; }
+    .file-size { color: var(--muted); font-size: 11px; }
+    .icon-button { display: grid; place-items: center; width: 30px; height: 30px; border: 0; border-radius: 8px; background: transparent; color: var(--muted); }
+    .icon-button:hover:not(:disabled) { background: var(--purple-soft); color: var(--purple); }
+    .voice-panel { display: flex; align-items: center; gap: 12px; padding: 12px; background: #f8f7fa; border: 1px solid var(--line); border-radius: 12px; }
+    .record-button { display: flex; align-items: center; justify-content: center; gap: 7px; background: #fff; border: 1px solid var(--line); border-radius: 9px; color: var(--ink); padding: 9px 12px; font-size: 12px; white-space: nowrap; }
+    .record-button:hover:not(:disabled) { border-color: #b29ae6; color: var(--purple); }
+    .record-button.stop { color: #be4b66; border-color: #efd0d8; background: #fff5f7; }
+    .voice-description { margin: 0; color: var(--muted); font-size: 11px; }
+    .record-time { color: #b74764; font-size: 12px; font-variant-numeric: tabular-nums; margin-left: auto; }
+    .wave { display: flex; align-items: center; gap: 3px; height: 22px; margin-left: auto; }
+    .wave span { width: 3px; height: 6px; background: #d0c6e1; border-radius: 3px; }
+    .wave span:nth-child(2n) { height: 16px; }
+    .wave span:nth-child(3n) { height: 22px; }
+    .recording .wave span { background: #bf6a86; animation: wave .7s ease-in-out infinite alternate; }
+    .recording .wave span:nth-child(2n) { animation-delay: -.3s; }
+    @keyframes wave { to { transform: scaleY(.3); } }
+    .audio-preview { display: flex; align-items: center; gap: 8px; margin-top: 10px; }
+    audio { width: 100%; min-width: 0; height: 35px; }
+    .submit-button { display: flex; align-items: center; justify-content: center; gap: 9px; width: 100%; border: 0; border-radius: 12px; padding: 13px 16px; margin-top: 24px; color: #fff; background: var(--purple); font-weight: 600; box-shadow: 0 4px 12px #7152c822; }
+    .submit-button:hover:not(:disabled) { background: var(--purple-dark); }
+    .submit-button:disabled { box-shadow: none; }
+    .status { display: flex; align-items: flex-start; justify-content: center; gap: 7px; color: var(--muted); font-size: 11px; margin: 12px 0 0; min-height: 18px; text-align: center; overflow-wrap: anywhere; }
+    .status[data-tone="error"] { color: #b5425c; }
+    .status[data-tone="success"] { color: var(--green); }
+    .status-dot { flex-shrink: 0; width: 5px; height: 5px; border-radius: 50%; background: currentColor; margin-top: 6px; }
+    .response-card { min-height: 548px; }
+    .response-body { padding: 26px; }
+    .empty-state { display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 350px; text-align: center; }
+    .empty-orbit { display: grid; place-items: center; width: 94px; height: 94px; border: 1px solid #eee8f6; border-radius: 50%; background: #fcfaff; margin-bottom: 22px; box-shadow: 0 0 0 13px #fbf9fd; }
+    .empty-orbit .icon { width: 32px; height: 32px; color: #9d82ce; stroke-width: 1.3; }
+    .empty-title { font-size: 15px; font-weight: 500; margin: 0 0 8px; }
+    .empty-description { color: var(--muted); font-size: 12px; line-height: 1.9; margin: 0; }
+    .suggestions { display: flex; justify-content: center; flex-wrap: wrap; gap: 8px; margin-top: 24px; }
+    .suggestion { border: 1px solid var(--line); background: #fff; color: var(--muted); border-radius: 20px; padding: 5px 11px; font-size: 11px; }
+    .suggestion:hover:not(:disabled) { color: var(--purple); border-color: #cfc1e8; }
+    .answer-label { display: flex; align-items: center; gap: 8px; color: var(--purple); font-size: 12px; font-weight: 600; margin-bottom: 16px; }
+    .reply { white-space: pre-wrap; overflow-wrap: anywhere; line-height: 1.95; font-size: 14px; margin: 0; }
+    .transcription { border-top: 1px solid var(--line); margin-top: 28px; padding-top: 18px; }
+    .transcription-header { display: flex; justify-content: space-between; align-items: center; font-size: 11px; color: var(--muted); }
+    .emotion { padding: 3px 9px; border-radius: 20px; background: var(--purple-soft); color: var(--purple); font-size: 10px; }
+    .transcription p { color: #6b6578; font-size: 12px; line-height: 1.8; white-space: pre-wrap; overflow-wrap: anywhere; margin-bottom: 6px; }
+    .emotion-note { color: var(--muted); font-size: 10px; }
+    .response-footer { margin: 0 26px 22px; padding-top: 16px; border-top: 1px solid #f0edf4; font-size: 11px; color: #96909f; display: flex; align-items: center; gap: 7px; }
+    .response-footer .icon { width: 14px; height: 14px; }
+    .pending .empty-orbit { animation: pulse 1.5s ease-in-out infinite; }
+    @keyframes pulse { 50% { box-shadow: 0 0 0 18px #f4eefb; } }
+    footer { display: flex; justify-content: space-between; padding: 28px 0 30px; color: #928b9e; font-size: 11px; }
+    footer span:last-child { color: #aaa3b5; letter-spacing: 1px; }
+    @media (max-width: 820px) {
+      .shell { padding: 0 22px; }
+      .workspace { grid-template-columns: 1fr; }
+      .response-card { min-height: auto; }
+      .empty-state { min-height: 280px; }
+      .intro { padding-top: 30px; }
     }
-    button {
-      padding: 12px 20px;
-      margin-right: 10px;
-      cursor: pointer;
+    @media (max-width: 440px) {
+      .shell { padding: 0 16px; }
+      .topbar { height: 76px; }
+      .brand-caption { display: none; }
+      .card-header { padding: 19px 20px; }
+      .composer, .response-body { padding: 20px; }
+      .voice-panel { gap: 8px; }
+      .wave { display: none; }
+      footer span:last-child { display: none; }
     }
-    .result {
-      margin-top: 20px;
-      padding: 15px;
-      background: #f3f4f6;
-      border-radius: 8px;
-      white-space: pre-wrap;
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation: none !important; transition: none !important; }
     }
   </style>
 </head>
-
 <body>
-  <h2>语音办公助手</h2>
-
-  <p>点击开始录音，首次使用需要允许麦克风权限。</p>
-
-  <button id="startBtn">🎤 开始录音</button>
-  <button id="stopBtn" disabled>⏹ 停止录音</button>
-
-  <p id="status">状态：等待录音</p>
-
-  <div class="result">
-    <p>语音转写：
-      <span id="text">暂无</span>
-    </p>
-
-    <p>情绪识别：
-      <span id="emotion">暂无</span>
-    </p>
-
-    <p>大模型回复：
-      <span id="reply">暂无</span>
-    </p>
+  <svg xmlns="http://www.w3.org/2000/svg" width="0" height="0" aria-hidden="true" style="position:absolute">
+    <symbol id="i-spark" viewBox="0 0 24 24"><path d="m12 3 2.5 6.5L21 12l-6.5 2.5L12 21l-2.5-6.5L3 12l6.5-2.5L12 3Z"/><path d="m20 2 .6 1.4L22 4l-1.4.6L20 6l-.6-1.4L18 4l1.4-.6L20 2Z"/></symbol>
+    <symbol id="i-image" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="4"/><circle cx="8" cy="8" r="1.5"/><path d="m3 17 5-5 4 4 4-6 5 7"/></symbol>
+    <symbol id="i-mic" viewBox="0 0 24 24"><rect x="9" y="2" width="6" height="13" rx="3"/><path d="M5 10v2a7 7 0 0 0 14 0v-2M12 19v3m-4 0h8"/></symbol>
+    <symbol id="i-stop" viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2" fill="currentColor" stroke="none"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24"><path d="m7 7 10 10M7 17 17 7"/></symbol>
+    <symbol id="i-copy" viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></symbol>
+    <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="10" width="14" height="11" rx="3"/><path d="M8 10V7a4 4 0 0 1 8 0v3m-4 5v2"/></symbol>
+  </svg>
+  <div class="shell">
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-mark"><svg class="icon" aria-hidden="true"><use href="#i-spark"/></svg></span>
+        <span class="brand-name">imoto<span style="color:var(--purple)">.</span></span>
+        <span class="brand-caption">你的日常办公助手</span>
+      </div>
+      <span class="local-badge"><svg class="icon" aria-hidden="true"><use href="#i-lock"/></svg>本地处理</span>
+    </header>
+    <main>
+      <section class="intro" aria-labelledby="pageTitle">
+        <p class="eyebrow">A LITTLE HELP, EVERY DAY</p>
+        <h1 id="pageTitle">说出你的想法，<span>一起看懂眼前。</span></h1>
+        <p>一段语音、一张图片，或几行文字。把问题交给我。</p>
+      </section>
+      <div class="workspace">
+        <section class="card" aria-labelledby="inputTitle">
+          <div class="card-header">
+            <div class="title-group"><span class="step">01</span><h2 id="inputTitle">告诉我你的需求</h2></div>
+            <span class="card-caption">自由组合输入</span>
+          </div>
+          <form id="composer" class="composer">
+            <div class="field">
+              <div class="field-header">
+                <label class="field-label" for="prompt">文字描述<span class="optional">可选</span></label>
+                <span id="charCount" class="counter">0 / 1000</span>
+              </div>
+              <textarea id="prompt" name="prompt" maxlength="1000" placeholder="例如：帮我提取这张图片中的待办事项，并按优先级整理。"></textarea>
+            </div>
+            <div class="field">
+              <div class="field-header"><span class="field-label">添加图片<span class="optional">可选 · 1 张</span></span></div>
+              <label id="dropZone" class="upload-zone" for="imageInput">
+                <input id="imageInput" type="file" accept="image/jpeg,image/png,image/webp" aria-label="选择一张图片" aria-describedby="imageHint">
+                <span class="upload-icon"><svg class="icon" aria-hidden="true"><use href="#i-image"/></svg></span>
+                <span class="upload-title"><strong>点击选择</strong>，或将图片拖到这里</span>
+                <span id="imageHint" class="upload-hint">JPG、PNG、WebP · 最大 10 MB</span>
+              </label>
+              <div id="imagePreview" class="image-preview" hidden>
+                <img id="previewImage" alt="待发送的图片预览">
+                <div class="file-info">
+                  <svg class="icon" style="color:var(--purple)" aria-hidden="true"><use href="#i-image"/></svg>
+                  <div class="file-meta"><span id="imageName" class="file-name"></span><span id="imageSize" class="file-size"></span></div>
+                  <button id="removeImage" class="icon-button" type="button" aria-label="移除图片" title="移除图片"><svg class="icon" aria-hidden="true"><use href="#i-close"/></svg></button>
+                </div>
+              </div>
+            </div>
+            <div class="field">
+              <div class="field-header"><span class="field-label">语音补充<span class="optional">可选</span></span></div>
+              <div id="voicePanel" class="voice-panel">
+                <button id="startBtn" class="record-button" type="button"><svg class="icon" aria-hidden="true"><use href="#i-mic"/></svg><span id="recordLabel">开始录音</span></button>
+                <button id="stopBtn" class="record-button stop" type="button" hidden><svg class="icon" aria-hidden="true"><use href="#i-stop"/></svg>停止录音</button>
+                <p id="voiceHint" class="voice-description">用声音描述，最多 20 秒</p>
+                <div class="wave" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+                <span id="recordTime" class="record-time" hidden>00:00</span>
+              </div>
+              <div id="audioPreview" class="audio-preview" hidden>
+                <audio id="audioPlayer" controls aria-label="录音预览"></audio>
+                <button id="removeAudio" class="icon-button" type="button" aria-label="移除录音" title="移除录音"><svg class="icon" aria-hidden="true"><use href="#i-close"/></svg></button>
+              </div>
+            </div>
+            <button id="sendBtn" class="submit-button" type="submit" disabled><span id="sendLabel">发送给助手</span><svg class="icon" aria-hidden="true"><use href="#i-arrow"/></svg></button>
+            <p id="status" class="status" role="status" aria-live="polite"><span class="status-dot" aria-hidden="true"></span><span id="statusText">添加文字、图片或语音后，即可发送</span></p>
+          </form>
+        </section>
+        <section id="responseCard" class="card response-card" aria-labelledby="outputTitle" aria-busy="false">
+          <div class="card-header">
+            <div class="title-group"><span class="step">02</span><h2 id="outputTitle">助手的回复</h2></div>
+            <button id="copyBtn" class="icon-button" type="button" aria-label="复制回复" title="复制回复" hidden><svg class="icon" aria-hidden="true"><use href="#i-copy"/></svg></button>
+          </div>
+          <div class="response-body">
+            <div id="emptyState" class="empty-state">
+              <div class="empty-orbit"><svg class="icon" aria-hidden="true"><use href="#i-spark"/></svg></div>
+              <p id="emptyTitle" class="empty-title">准备好，听你说，也陪你看。</p>
+              <p id="emptyDescription" class="empty-description">发送后，我会结合你提供的内容作答。<br>可以从这些小事开始：</p>
+              <div id="suggestions" class="suggestions">
+                <button class="suggestion" type="button" data-prompt="请提取图片中的文字，并整理成清晰的条目。">提取图片文字</button>
+                <button class="suggestion" type="button" data-prompt="请根据我提供的内容整理待办事项，并按优先级排序。">整理待办事项</button>
+                <button class="suggestion" type="button" data-prompt="请帮我润色以下内容，让表达更清晰、自然：">润色一段文字</button>
+              </div>
+            </div>
+            <div id="answer" hidden>
+              <div class="answer-label"><svg class="icon" aria-hidden="true"><use href="#i-spark"/></svg>imoto</div>
+              <p id="reply" class="reply"></p>
+              <div id="transcription" class="transcription" hidden>
+                <div class="transcription-header"><span>本次语音转写</span><span id="emotion" class="emotion"></span></div>
+                <p id="text"></p>
+                <span class="emotion-note">情绪识别仅供参考</span>
+              </div>
+            </div>
+          </div>
+          <div class="response-footer"><svg class="icon" aria-hidden="true"><use href="#i-lock"/></svg>文字、图片与语音，在本机一起理解。</div>
+        </section>
+      </div>
+    </main>
+    <footer><span>每次发送都是一次新的提问，不保留对话上下文。</span><span>MADE FOR YOUR EVERYDAY</span></footer>
   </div>
-
   <script>
-    const startBtn = document.getElementById("startBtn");
-    const stopBtn = document.getElementById("stopBtn");
-    const statusEl = document.getElementById("status");
-    const textEl = document.getElementById("text");
-    const emotionEl = document.getElementById("emotion");
-    const replyEl = document.getElementById("reply");
-
+    const $ = id => document.getElementById(id);
+    const promptInput = $("prompt");
+    let selectedImage = null;
+    let imageUrl = null;
+    let audioBlob = null;
+    let audioUrl = null;
     let stream = null;
     let recorder = null;
-    let chunks = [];
     let stopTimer = null;
+    let tickTimer = null;
+    let recording = false;
+    let preparing = false;
+    let busy = false;
 
-    function setStatus(message) {
-      statusEl.textContent = "状态：" + message;
+    function setStatus(message, tone = "neutral") {
+      $("statusText").textContent = message;
+      $("status").dataset.tone = tone;
     }
 
-    // ========== 1. 开始录音 ==========
-    startBtn.onclick = async () => {
-      startBtn.disabled = true;
+    function updateControls() {
+      const locked = busy || recording || preparing;
+      $("startBtn").disabled = locked;
+      $("startBtn").hidden = recording;
+      $("stopBtn").hidden = !recording;
+      $("stopBtn").disabled = !recording;
+      $("imageInput").disabled = locked;
+      $("removeImage").disabled = locked;
+      $("removeAudio").disabled = locked;
+      promptInput.disabled = busy;
+      $("dropZone").classList.toggle("disabled", locked);
+      $("sendBtn").disabled = locked || !(promptInput.value.trim() || selectedImage || audioBlob);
+      $("sendLabel").textContent = busy ? "正在处理，请稍候…" : "发送给助手";
+      $("recordLabel").textContent = preparing ? "正在打开麦克风…" : audioBlob ? "重新录音" : "开始录音";
+      $("charCount").textContent = `${promptInput.value.length} / 1000`;
+      $("voicePanel").classList.toggle("recording", recording);
+      $("recordTime").hidden = !recording;
+      document.querySelectorAll(".suggestion").forEach(button => { button.disabled = busy; });
+    }
 
+    function clearImage() {
+      if (imageUrl) URL.revokeObjectURL(imageUrl);
+      imageUrl = null;
+      selectedImage = null;
+      $("imageInput").value = "";
+      $("previewImage").removeAttribute("src");
+      $("imagePreview").hidden = true;
+      $("dropZone").hidden = false;
+      updateControls();
+    }
+
+    function selectImage(file) {
+      if (!file || busy || recording || preparing) return;
+      if (!["image/jpeg", "image/png", "image/webp"].includes(file.type)) {
+        $("imageInput").value = "";
+        setStatus("请选择 JPG、PNG 或 WebP 图片", "error");
+        return;
+      }
+      if (!file.size || file.size > 10 * 1024 * 1024) {
+        $("imageInput").value = "";
+        setStatus("图片不能为空，且不能超过 10 MB", "error");
+        return;
+      }
+      clearImage();
+      selectedImage = file;
+      imageUrl = URL.createObjectURL(file);
+      $("previewImage").src = imageUrl;
+      $("imageName").textContent = file.name;
+      $("imageSize").textContent = file.size >= 1024 * 1024 ? `${(file.size / 1024 / 1024).toFixed(1)} MB` : `${Math.ceil(file.size / 1024)} KB`;
+      $("imagePreview").hidden = false;
+      $("dropZone").hidden = true;
+      setStatus("图片已添加，可补充文字或录音后发送", "success");
+      updateControls();
+    }
+
+    $("imageInput").addEventListener("change", event => selectImage(event.target.files[0]));
+    $("previewImage").addEventListener("error", () => {
+      if (!selectedImage) return;
+      clearImage();
+      setStatus("图片无法预览，请重新选择有效图片", "error");
+    });
+    $("removeImage").onclick = () => { clearImage(); setStatus("图片已移除"); $("imageInput").focus(); };
+    for (const name of ["dragenter", "dragover", "dragleave", "drop"]) {
+      $("dropZone").addEventListener(name, event => {
+        event.preventDefault();
+        if (busy || recording || preparing) return;
+        $("dropZone").classList.toggle("dragging", name === "dragenter" || name === "dragover");
+        if (name === "drop") {
+          if (event.dataTransfer.files.length !== 1) setStatus("每次请选择一张图片", "error");
+          else selectImage(event.dataTransfer.files[0]);
+        }
+      });
+    }
+
+    function releaseMicrophone() {
+      clearTimeout(stopTimer);
+      clearInterval(tickTimer);
+      if (stream) stream.getTracks().forEach(track => track.stop());
+      stream = null;
+    }
+
+    function clearAudio() {
+      $("audioPlayer").pause();
+      $("audioPlayer").removeAttribute("src");
+      $("audioPlayer").load();
+      if (audioUrl) URL.revokeObjectURL(audioUrl);
+      audioUrl = null;
+      audioBlob = null;
+      $("audioPreview").hidden = true;
+      $("voiceHint").textContent = "用声音描述，最多 20 秒";
+      updateControls();
+    }
+
+    $("removeAudio").onclick = () => { clearAudio(); setStatus("录音已移除"); };
+    $("startBtn").onclick = async () => {
+      if (busy || preparing || recording) return;
+      preparing = true;
+      updateControls();
+      setStatus("正在请求麦克风权限…");
       try {
-        if (!navigator.mediaDevices?.getUserMedia) {
-          throw new Error("当前页面不支持麦克风访问，请使用 localhost 或 HTTPS");
-        }
-
-        // 请求浏览器麦克风权限
-        stream = await navigator.mediaDevices.getUserMedia({
-          audio: true,
-          video: false
-        });
-
-        // 检查浏览器支持的录音格式
-        const formats = [
-          "audio/webm;codecs=opus",
-          "audio/ogg;codecs=opus",
-          "audio/mp4"
-        ];
-
-        const supported = formats.find(
-          type => MediaRecorder.isTypeSupported(type)
-        );
-
-        recorder = new MediaRecorder(
-          stream,
-          supported ? { mimeType: supported } : {}
-        );
-
-        chunks = [];
-
-        // 保存录制的音频片段
-        recorder.ondataavailable = event => {
-          if (event.data.size > 0) {
-            chunks.push(event.data);
-          }
+        if (!navigator.mediaDevices?.getUserMedia || !window.MediaRecorder) throw new Error("当前浏览器不支持录音，请使用 localhost 或 HTTPS 下的现代浏览器");
+        stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
+        const supported = ["audio/webm;codecs=opus", "audio/ogg;codecs=opus", "audio/mp4"].find(type => MediaRecorder.isTypeSupported(type));
+        const activeRecorder = new MediaRecorder(stream, supported ? { mimeType: supported } : {});
+        recorder = activeRecorder;
+        const chunks = [];
+        let failed = false;
+        activeRecorder.ondataavailable = event => { if (event.data.size) chunks.push(event.data); };
+        activeRecorder.onerror = () => {
+          failed = true;
+          releaseMicrophone();
+          recording = false;
+          preparing = false;
+          if (activeRecorder.state !== "inactive") activeRecorder.stop();
+          setStatus("录音中断，请检查麦克风后重新录制", "error");
+          updateControls();
         };
-
-        // ========== 2. 录音停止 ==========
-        recorder.onstop = async () => {
-          clearTimeout(stopTimer);
-
-          // 释放麦克风
-          stream.getTracks().forEach(track => track.stop());
-
-          stopBtn.disabled = true;
-          setStatus("正在上传音频并进行识别...");
-
-          const type = recorder.mimeType || "audio/webm";
-          const blob = new Blob(chunks, { type });
-
-          if (!blob.size) {
-            setStatus("录音为空，请重试");
-            startBtn.disabled = false;
-            return;
+        activeRecorder.onstop = () => {
+          releaseMicrophone();
+          recording = false;
+          if (!failed) {
+            const blob = new Blob(chunks, { type: activeRecorder.mimeType || "audio/webm" });
+            if (blob.size) {
+              clearAudio();
+              audioBlob = blob;
+              audioUrl = URL.createObjectURL(blob);
+              $("audioPlayer").src = audioUrl;
+              $("audioPreview").hidden = false;
+              $("voiceHint").textContent = "录音已就绪，可试听或重录";
+              setStatus("录音已保存，点击「发送给助手」开始处理", "success");
+            } else setStatus("没有录到声音，请重新录制", "error");
           }
-
-          const ext = type.includes("ogg") ? "ogg"
-                    : type.includes("mp4") ? "mp4"
-                    : "webm";
-
-          // ========== 3. 上传至Python后端 ==========
-          const formData = new FormData();
-          formData.append("file", blob, "recording." + ext);
-
-          try {
-            const response = await fetch("/recognize", {
-              method: "POST",
-              body: formData
-            });
-
-            if (!response.ok) {
-              throw new Error(await response.text());
-            }
-
-            const result = await response.json();
-
-            // ========== 4. 显示识别结果 ==========
-            textEl.textContent = result.text;
-            emotionEl.textContent = result.emotion;
-            replyEl.textContent = result.reply;
-
-            setStatus("识别完成");
-
-          } catch (err) {
-              console.error("处理错误：", err);
-              setStatus("处理失败：" + err.message);
-            } finally {
-            startBtn.disabled = false;
-          }
+          updateControls();
+          $("startBtn").focus();
         };
-
-        recorder.start();
-        stopBtn.disabled = false;
-        setStatus("正在录音，请说话...");
-
-        // 演示版最多录制20秒
-        stopTimer = setTimeout(() => {
-          if (recorder.state === "recording") {
-            recorder.stop();
-          }
-        }, 20000);
-
-      } catch (err) {
-        if (stream) {
-          stream.getTracks().forEach(track => track.stop());
-        }
-        setStatus("无法录音：" + err.message);
-        startBtn.disabled = false;
+        $("audioPlayer").pause();
+        activeRecorder.start();
+        preparing = false;
+        recording = true;
+        $("voiceHint").textContent = "正在倾听，20 秒后自动停止";
+        $("recordTime").textContent = "00:00";
+        const startedAt = Date.now();
+        tickTimer = setInterval(() => {
+          const seconds = Math.min(20, Math.floor((Date.now() - startedAt) / 1000));
+          $("recordTime").textContent = `00:${String(seconds).padStart(2, "0")}`;
+        }, 250);
+        stopTimer = setTimeout(() => { if (activeRecorder.state === "recording") activeRecorder.stop(); }, 20000);
+        setStatus("正在录音，可以描述图片或补充你的要求");
+        updateControls();
+        $("stopBtn").focus();
+      } catch (error) {
+        releaseMicrophone();
+        preparing = false;
+        recording = false;
+        setStatus(error.name === "NotAllowedError" ? "麦克风权限被拒绝，请在浏览器设置中允许访问" : `无法录音：${error.message}`, "error");
+        updateControls();
       }
     };
-
-    // ========== 5. 手动停止录音 ==========
-    stopBtn.onclick = () => {
-      if (recorder && recorder.state === "recording") {
-        stopBtn.disabled = true;
-        recorder.stop();
-      }
+    $("stopBtn").onclick = () => {
+      if (recorder?.state === "recording") { $("stopBtn").disabled = true; recorder.stop(); }
     };
+    promptInput.addEventListener("input", updateControls);
+    document.querySelectorAll(".suggestion").forEach(button => {
+      button.onclick = () => { promptInput.value = button.dataset.prompt; updateControls(); promptInput.focus(); };
+    });
+
+    $("composer").addEventListener("submit", async event => {
+      event.preventDefault();
+      if (busy || recording || preparing || !(promptInput.value.trim() || selectedImage || audioBlob)) return;
+      const formData = new FormData();
+      const hadAudio = Boolean(audioBlob);
+      formData.append("prompt", promptInput.value.trim());
+      if (selectedImage) formData.append("image", selectedImage, selectedImage.name);
+      if (audioBlob) {
+        const ext = audioBlob.type.includes("ogg") ? "ogg" : audioBlob.type.includes("mp4") ? "mp4" : "webm";
+        formData.append("file", audioBlob, `recording.${ext}`);
+      }
+      busy = true;
+      updateControls();
+      $("responseCard").setAttribute("aria-busy", "true");
+      $("responseCard").classList.add("pending");
+      $("emptyState").hidden = false;
+      $("answer").hidden = true;
+      $("copyBtn").hidden = true;
+      $("suggestions").hidden = true;
+      $("emptyTitle").textContent = "正在理解你的内容…";
+      $("emptyDescription").textContent = "正在处理输入并生成回复，请稍候。";
+      setStatus("内容已发送，正在等待助手回复…");
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 180000);
+      try {
+        const response = await fetch("/recognize", { method: "POST", body: formData, signal: controller.signal });
+        const result = await response.json().catch(() => null);
+        if (!response.ok) throw new Error(typeof result?.detail === "string" ? result.detail : `请求失败（${response.status}），请检查输入后重试`);
+        if (!result || typeof result.reply !== "string") throw new Error("服务返回了无法读取的回复，请重试");
+        $("reply").textContent = result.reply;
+        $("text").textContent = result.text || "未识别到文字";
+        $("emotion").textContent = `情绪 · ${result.emotion || "未知"}`;
+        $("transcription").hidden = !hadAudio;
+        $("emptyState").hidden = true;
+        $("answer").hidden = false;
+        $("copyBtn").hidden = false;
+        setStatus("回复已生成", "success");
+      } catch (error) {
+        const message = error.name === "AbortError" ? "处理时间过长，请稍后重试" : error.message;
+        $("emptyTitle").textContent = "这次没能完成，请再试一次";
+        $("emptyDescription").textContent = "输入内容已保留，你可以调整后重新发送。";
+        setStatus(message, "error");
+      } finally {
+        clearTimeout(timeout);
+        busy = false;
+        $("responseCard").setAttribute("aria-busy", "false");
+        $("responseCard").classList.remove("pending");
+        updateControls();
+      }
+    });
+    $("copyBtn").onclick = async () => {
+      try { await navigator.clipboard.writeText($("reply").textContent); setStatus("回复已复制", "success"); }
+      catch { setStatus("无法访问剪贴板，请选中文字后手动复制", "error"); }
+    };
+    window.addEventListener("pagehide", () => {
+      releaseMicrophone();
+    });
   </script>
 </body>
 </html>

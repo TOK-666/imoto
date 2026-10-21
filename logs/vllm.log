@@ -1,0 +1,273 @@
+(APIServer pid=200194) INFO 10-20 23:17:57 [api_utils.py:345] 
+(APIServer pid=200194) INFO 10-20 23:17:57 [api_utils.py:345]        █     █     █▄   ▄█
+(APIServer pid=200194) INFO 10-20 23:17:57 [api_utils.py:345]  ▄▄ ▄█ █     █     █ ▀▄▀ █  version 0.27.1
+(APIServer pid=200194) INFO 10-20 23:17:57 [api_utils.py:345]   █▄█▀ █     █     █     █  model   ./models/Qwen2.5-VL-3B-Instruct-AWQ
+(APIServer pid=200194) INFO 10-20 23:17:57 [api_utils.py:345]    ▀▀  ▀▀▀▀▀ ▀▀▀▀▀ ▀     ▀
+(APIServer pid=200194) INFO 10-20 23:17:57 [api_utils.py:345] 
+(APIServer pid=200194) INFO 10-20 23:17:57 [api_utils.py:273] non-default args: {'model_tag': './models/Qwen2.5-VL-3B-Instruct-AWQ', 'host': '127.0.0.1', 'model': './models/Qwen2.5-VL-3B-Instruct-AWQ', 'max_model_len': 2048, 'quantization': 'awq', 'enforce_eager': True, 'served_model_name': ['qwen'], 'gpu_memory_utilization': 0.8, 'max_num_seqs': 1}
+(APIServer pid=200194) INFO 10-20 23:17:57 [model.py:645] Resolved architecture: Qwen2_5_VLForConditionalGeneration
+(APIServer pid=200194) INFO 10-20 23:17:57 [model.py:1883] Using max model len 2048
+(APIServer pid=200194) WARNING 10-20 23:17:58 [vllm.py:1194] Enforce eager set, disabling torch.compile and CUDAGraphs. This is equivalent to setting -cc.mode=none -cc.cudagraph_mode=none
+(APIServer pid=200194) WARNING 10-20 23:17:58 [vllm.py:1247] Inductor compilation was disabled by user settings, optimizations settings that are only active during inductor compilation will be ignored.
+(APIServer pid=200194) INFO 10-20 23:17:58 [kernel.py:306] Final IR op priority after setting platform defaults: IrOpPriorityConfig(rms_norm=['vllm_c', 'native'], fused_add_rms_norm=['vllm_c', 'native'])
+(APIServer pid=200194) INFO 10-20 23:17:58 [vllm.py:1426] Cudagraph is disabled under eager mode
+(APIServer pid=200194) INFO 10-20 23:17:58 [compilation.py:329] Enabled custom fusions: norm_quant, act_quant
+(APIServer pid=200194) [transformers] The `use_fast` parameter is deprecated and will be removed in a future version. Use `backend="torchvision"` instead of `use_fast=True`, or `backend="pil"` instead of `use_fast=False`.
+(EngineCore pid=200493) INFO 10-20 23:18:10 [core.py:121] Initializing a V1 LLM engine (v0.27.1) with config: model='./models/Qwen2.5-VL-3B-Instruct-AWQ', speculative_config=None, tokenizer='./models/Qwen2.5-VL-3B-Instruct-AWQ', skip_tokenizer_init=False, tokenizer_mode=auto, revision=None, tokenizer_revision=None, trust_remote_code=False, dtype=torch.bfloat16, max_seq_len=2048, download_dir=None, load_format=auto, tensor_parallel_size=1, pipeline_parallel_size=1, data_parallel_size=1, decode_context_parallel_size=1, dcp_comm_backend=ag_rs, disable_custom_all_reduce=False, quantization=auto_awq, quantization_config=None, enforce_eager=True, enable_return_routed_experts=False, kv_cache_dtype=auto, device_config=cuda, structured_outputs_config=StructuredOutputsConfig(backend='auto', disable_any_whitespace=False, disable_additional_properties=False, reasoning_parser='', reasoning_parser_plugin='', enable_in_reasoning=False), observability_config=ObservabilityConfig(show_hidden_metrics_for_version=None, otlp_traces_endpoint=None, collect_detailed_traces=None, kv_cache_metrics=False, kv_cache_metrics_sample=0.01, cudagraph_metrics=False, enable_layerwise_nvtx_tracing=False, enable_mfu_metrics=False, enable_mm_processor_stats=False, enable_logging_iteration_details=False, jit_monitor_mode='warn', jit_monitor_verbose=False), seed=0, served_model_name=qwen, enable_prefix_caching=True, enable_chunked_prefill=True, pooler_config=None, compilation_config={'mode': <CompilationMode.NONE: 0>, 'debug_dump_path': None, 'cache_dir': '', 'compile_cache_save_format': 'binary', 'backend': 'inductor', 'custom_ops': ['all'], 'ir_enable_torch_wrap': False, 'splitting_ops': [], 'compile_mm_encoder': False, 'cudagraph_mm_encoder': False, 'encoder_cudagraph_token_budgets': [], 'encoder_cudagraph_max_vision_items_per_batch': 0, 'encoder_cudagraph_max_frames_per_batch': None, 'compile_sizes': [], 'compile_ranges_endpoints': [2048], 'inductor_compile_config': {'enable_auto_functionalized_v2': False, 'combo_kernels': True, 'benchmark_combo_kernel': True}, 'inductor_passes': {}, 'cudagraph_mode': <CUDAGraphMode.NONE: 0>, 'cudagraph_num_of_warmups': 0, 'cudagraph_capture_sizes': [], 'cudagraph_copy_inputs': False, 'cudagraph_specialize_lora': True, 'use_inductor_graph_partition': False, 'pass_config': {'fuse_norm_quant': True, 'fuse_act_quant': True, 'fuse_attn_quant': False, 'enable_sp': False, 'fuse_gemm_comms': False, 'fuse_allreduce_rms': False, 'enable_qk_norm_rope_fusion': False, 'fuse_rope_kvcache_cat_mla': False, 'fuse_act_padding': False, 'fuse_qk_norm_rope_kvcache': False}, 'max_cudagraph_capture_size': 0, 'dynamic_shapes_config': {'type': <DynamicShapesType.BACKED: 'backed'>, 'evaluate_guards': False, 'assume_32_bit_indexing': False}, 'local_cache_dir': None, 'fast_moe_cold_start': False, 'static_all_moe_layers': []}, kernel_config=KernelConfig(ir_op_priority=IrOpPriorityConfig(rms_norm=['vllm_c', 'native'], fused_add_rms_norm=['vllm_c', 'native']), enable_flashinfer_autotune=True, enable_cutedsl_warmup=True, enable_jit_warmup=True, enable_bf16x3_router_gemm=False, moe_backend='auto', linear_backend='auto')
+(EngineCore pid=200493) INFO 10-20 23:18:11 [parallel_state.py:1640] world_size=1 rank=0 local_rank=0 distributed_init_method=tcp://172.20.163.32:58763 backend=nccl
+(EngineCore pid=200493) INFO 10-20 23:18:11 [parallel_state.py:1977] rank 0 in world size 1 is assigned as DP rank 0, PP rank 0, PCP rank 0, TP rank 0, EP rank N/A, EPLB rank N/A
+(EngineCore pid=200493) INFO 10-20 23:18:12 [topk_topp_sampler.py:62] Using FlashInfer for top-p & top-k sampling.
+(EngineCore pid=200493) [transformers] The `use_fast` parameter is deprecated and will be removed in a future version. Use `backend="torchvision"` instead of `use_fast=True`, or `backend="pil"` instead of `use_fast=False`.
+(EngineCore pid=200493) INFO 10-20 23:18:15 [gpu_model_runner.py:5308] Starting to load model ./models/Qwen2.5-VL-3B-Instruct-AWQ...
+(EngineCore pid=200493) INFO 10-20 23:18:16 [cuda.py:541] Using backend AttentionBackendEnum.FLASH_ATTN for vit attention
+(EngineCore pid=200493) INFO 10-20 23:18:16 [mm_encoder_attention.py:375] Using AttentionBackendEnum.FLASH_ATTN for MMEncoderAttention.
+(EngineCore pid=200493) WARNING 10-20 23:18:16 [vllm.py:1194] Enforce eager set, disabling torch.compile and CUDAGraphs. This is equivalent to setting -cc.mode=none -cc.cudagraph_mode=none
+(EngineCore pid=200493) WARNING 10-20 23:18:16 [vllm.py:1247] Inductor compilation was disabled by user settings, optimizations settings that are only active during inductor compilation will be ignored.
+(EngineCore pid=200493) INFO 10-20 23:18:16 [kernel.py:306] Final IR op priority after setting platform defaults: IrOpPriorityConfig(rms_norm=['vllm_c', 'native'], fused_add_rms_norm=['vllm_c', 'native'])
+(EngineCore pid=200493) INFO 10-20 23:18:16 [vllm.py:1426] Cudagraph is disabled under eager mode
+(EngineCore pid=200493) INFO 10-20 23:18:16 [compilation.py:329] Enabled custom fusions: norm_quant, act_quant
+(EngineCore pid=200493) INFO 10-20 23:18:16 [auto_awq.py:473] Using MarlinLinearKernel for AutoAWQMarlinLinearMethod
+(EngineCore pid=200493) INFO 10-20 23:18:16 [cuda.py:482] Using FLASH_ATTN attention backend out of potential backends: ['FLASH_ATTN', 'FLASHINFER', 'TRITON_ATTN', 'FLEX_ATTENTION'].
+(EngineCore pid=200493) INFO 10-20 23:18:16 [flash_attn.py:789] Using FlashAttention version 2
+(EngineCore pid=200493) INFO 10-20 23:18:16 [weight_utils.py:867] Filesystem type for checkpoints: EXT4. Checkpoint size: 3.17 GiB. Available RAM: 9.95 GiB.
+(EngineCore pid=200493) INFO 10-20 23:18:16 [weight_utils.py:890] Auto-prefetch is disabled because the filesystem (EXT4) is not a recognized network FS (NFS/Lustre). If you want to force prefetching, start vLLM with --safetensors-load-strategy=prefetch.
+(EngineCore pid=200493) Loading safetensors checkpoint shards:   0% Completed | 0/1 [00:00<?, ?it/s]
+(EngineCore pid=200493) Loading safetensors checkpoint shards: 100% Completed | 1/1 [00:02<00:00,  2.84s/it]
+(EngineCore pid=200493) Loading safetensors checkpoint shards: 100% Completed | 1/1 [00:02<00:00,  2.84s/it]
+(EngineCore pid=200493) 
+(EngineCore pid=200493) INFO 10-20 23:18:19 [default_loader.py:430] Loading weights took 2.84 seconds
+(EngineCore pid=200493) INFO 10-20 23:18:20 [gpu_model_runner.py:5405] Model loading took 3.32 GiB memory and 4.046040 seconds
+(EngineCore pid=200493) INFO 10-20 23:18:20 [gpu_model_runner.py:6465] Encoder cache will be initialized with a budget of 16384 tokens, and profiled with 1 video items of the maximum feature size.
+(EngineCore pid=200493) [transformers] Qwen2VL video processing does not apply the per-frame pixel cap the reference implementation (qwen-vl-utils) applies, so some videos cost far more tokens than they would there. In v5.22 the capped behavior will become the default and `cap_pixels_per_frame` will be removed. Pass `cap_pixels_per_frame=True` to adopt the reference behavior now, or `False` to keep the current behavior and silence this warning.
+(EngineCore pid=200493) INFO 10-20 23:18:33 [gpu_worker.py:563] Available KV cache memory: 1.05 GiB
+(EngineCore pid=200493) INFO 10-20 23:18:33 [kv_cache_utils.py:2235] GPU KV cache size: 30,512 tokens
+(EngineCore pid=200493) INFO 10-20 23:18:33 [kv_cache_utils.py:2236] Maximum concurrency for 2,048 tokens per request: 14.90x
+(EngineCore pid=200493) INFO 10-20 23:18:33 [gpu_worker.py:789] Free memory on device (6.93/8.0 GiB) on startup. Desired GPU memory utilization is (0.8, 6.4 GiB). Actual usage is 3.47 GiB for consumed memory (weights + non-torch), 1.88 GiB for peak activation, and 0.0 GiB for CUDAGraph memory. Replace gpu_memory_utilization config with `--kv-cache-memory=968092672` (0.9 GiB) to fit into requested memory, or `--kv-cache-memory=1540615168` (1.43 GiB) to fully utilize gpu memory. Current kv cache memory in use is 1.05 GiB.
+(EngineCore pid=200493) INFO 10-20 23:18:34 [jit_monitor.py:79] Kernel JIT monitor activated; monitored JIT compilations during inference will use mode=warn.
+(EngineCore pid=200493) INFO 10-20 23:18:34 [core.py:355] init engine (profile, create kv cache, warmup model) took 14.28 s
+(EngineCore pid=200493) INFO 10-20 23:18:34 [kernel.py:306] Final IR op priority after setting platform defaults: IrOpPriorityConfig(rms_norm=['vllm_c', 'native'], fused_add_rms_norm=['vllm_c', 'native'])
+(APIServer pid=200194) INFO 10-20 23:18:34 [api_server.py:678] Supported tasks: ['generate']
+(APIServer pid=200194) INFO 10-20 23:18:35 [hf.py:540] Detected the chat template content format to be 'openai'. You can set `--chat-template-content-format` to override this.
+(APIServer pid=200194) [transformers] Qwen2VL video processing does not apply the per-frame pixel cap the reference implementation (qwen-vl-utils) applies, so some videos cost far more tokens than they would there. In v5.22 the capped behavior will become the default and `cap_pixels_per_frame` will be removed. Pass `cap_pixels_per_frame=True` to adopt the reference behavior now, or `False` to keep the current behavior and silence this warning.
+(APIServer pid=200194) INFO 10-20 23:18:44 [base.py:235] Multi-modal warmup completed in 8.795s
+(APIServer pid=200194) INFO 10-20 23:18:45 [base.py:235] Readonly multi-modal warmup completed in 1.098s
+(APIServer pid=200194) WARNING 10-20 23:18:45 [model.py:1637] Default vLLM sampling parameters have been overridden by the model's `generation_config.json`: `{'repetition_penalty': 1.05, 'temperature': 0.1, 'top_k': 1, 'top_p': 0.001}`. If this is not intended, please relaunch vLLM instance with `--generation-config vllm`.
+(APIServer pid=200194) INFO 10-20 23:18:45 [api_server.py:682] Starting vLLM server on http://127.0.0.1:8000
+(APIServer pid=200194) INFO 10-20 23:18:45 [launcher.py:37] Available routes are:
+(APIServer pid=200194) INFO 10-20 23:18:45 [launcher.py:46] Route: /openapi.json, Methods: GET, HEAD
+(APIServer pid=200194) INFO 10-20 23:18:45 [launcher.py:46] Route: /docs, Methods: GET, HEAD
+(APIServer pid=200194) INFO 10-20 23:18:45 [launcher.py:46] Route: /docs/oauth2-redirect, Methods: GET, HEAD
+(APIServer pid=200194) INFO 10-20 23:18:45 [launcher.py:46] Route: /redoc, Methods: GET, HEAD
+(APIServer pid=200194) INFO 10-20 23:18:45 [launcher.py:46] Route: /load, Methods: GET
+(APIServer pid=200194) INFO 10-20 23:18:45 [launcher.py:46] Route: /version, Methods: GET
+(APIServer pid=200194) INFO 10-20 23:18:45 [launcher.py:46] Route: /health, Methods: GET
+(APIServer pid=200194) INFO 10-20 23:18:45 [launcher.py:46] Route: /metrics, Methods: GET
+(APIServer pid=200194) INFO 10-20 23:18:45 [launcher.py:46] Route: /tokenize, Methods: POST
+(APIServer pid=200194) INFO 10-20 23:18:45 [launcher.py:46] Route: /detokenize, Methods: POST
+(APIServer pid=200194) INFO 10-20 23:18:45 [launcher.py:46] Route: /v1/models, Methods: GET
+(APIServer pid=200194) INFO 10-20 23:18:45 [launcher.py:46] Route: /ping, Methods: GET
+(APIServer pid=200194) INFO 10-20 23:18:45 [launcher.py:46] Route: /ping, Methods: POST
+(APIServer pid=200194) INFO 10-20 23:18:45 [launcher.py:46] Route: /invocations, Methods: POST
+(APIServer pid=200194) INFO 10-20 23:18:45 [launcher.py:46] Route: /v1/chat/completions, Methods: POST
+(APIServer pid=200194) INFO 10-20 23:18:45 [launcher.py:46] Route: /v1/chat/completions/batch, Methods: POST
+(APIServer pid=200194) INFO 10-20 23:18:45 [launcher.py:46] Route: /v1/responses, Methods: POST
+(APIServer pid=200194) INFO 10-20 23:18:45 [launcher.py:46] Route: /v1/responses/{response_id}, Methods: GET
+(APIServer pid=200194) INFO 10-20 23:18:45 [launcher.py:46] Route: /v1/responses/{response_id}/cancel, Methods: POST
+(APIServer pid=200194) INFO 10-20 23:18:45 [launcher.py:46] Route: /v1/completions, Methods: POST
+(APIServer pid=200194) INFO 10-20 23:18:45 [launcher.py:46] Route: /v1/messages, Methods: POST
+(APIServer pid=200194) INFO 10-20 23:18:45 [launcher.py:46] Route: /v1/messages/count_tokens, Methods: POST
+(APIServer pid=200194) INFO 10-20 23:18:45 [launcher.py:46] Route: /generative_scoring, Methods: POST
+(APIServer pid=200194) INFO 10-20 23:18:45 [launcher.py:46] Route: /scale_elastic_ep, Methods: POST
+(APIServer pid=200194) INFO 10-20 23:18:45 [launcher.py:46] Route: /is_scaling_elastic_ep, Methods: POST
+(APIServer pid=200194) INFO 10-20 23:18:45 [launcher.py:46] Route: /v1/chat/completions/render, Methods: POST
+(APIServer pid=200194) INFO 10-20 23:18:45 [launcher.py:46] Route: /v1/completions/render, Methods: POST
+(APIServer pid=200194) INFO 10-20 23:18:45 [launcher.py:46] Route: /v1/chat/completions/derender, Methods: POST
+(APIServer pid=200194) INFO 10-20 23:18:45 [launcher.py:46] Route: /v1/completions/derender, Methods: POST
+(APIServer pid=200194) INFO 10-20 23:18:45 [launcher.py:46] Route: /inference/v1/generate, Methods: POST
+(APIServer pid=200194) INFO 10-20 23:18:45 [launcher.py:99] API server: waiting for HTTP server to start
+(APIServer pid=200194) INFO:     Started server process [200194]
+(APIServer pid=200194) INFO:     Waiting for application startup.
+(APIServer pid=200194) INFO:     Application startup complete.
+(APIServer pid=200194) INFO 10-20 23:18:45 [launcher.py:105] API server: HTTP server started
+(APIServer pid=200194) INFO:     127.0.0.1:44386 - "GET /v1/models HTTP/1.1" 200 OK
+(EngineCore pid=200493) WARNING 10-20 23:38:03 [jit_monitor.py:135] Triton kernel JIT compilation during inference: _triton_mrope_forward. This causes a latency spike; consider extending warmup to cover this shape/config.
+(APIServer pid=200194) INFO:     127.0.0.1:52658 - "POST /v1/chat/completions HTTP/1.1" 200 OK
+(APIServer pid=200194) INFO 10-20 23:38:05 [loggers.py:310] Engine 000: Avg prompt throughput: 54.1 tokens/s, Avg generation throughput: 4.0 tokens/s, Running: 0 reqs, Waiting: 0 reqs, GPU KV cache usage: 0.0%, Prefix cache hit rate: 0.0%, MM cache hit rate: 0.0%
+(APIServer pid=200194) INFO 10-20 23:38:15 [loggers.py:310] Engine 000: Avg prompt throughput: 0.0 tokens/s, Avg generation throughput: 0.0 tokens/s, Running: 0 reqs, Waiting: 0 reqs, GPU KV cache usage: 0.0%, Prefix cache hit rate: 0.0%, MM cache hit rate: 0.0%
+(APIServer pid=200194) INFO 10-20 23:58:23 [launcher.py:112] [shutdown] API server: shutdown triggered
+(APIServer pid=200194) INFO 10-20 23:58:23 [launcher.py:128] [shutdown] API server: stopping engine client mode=abort timeout=0s
+(APIServer pid=200194) INFO 10-20 23:58:23 [core_client.py:686] [shutdown] MPClient: start timeout=0s
+(APIServer pid=200194) INFO 10-20 23:58:23 [core_client.py:688] [shutdown] MPClient: stopping engine manager
+(APIServer pid=200194) INFO 10-20 23:58:23 [utils.py:612] [shutdown] Process manager: send sigterm to process EngineCore
+(APIServer pid=200194) WARNING 10-20 23:58:23 [utils.py:632] [shutdown] Process manager: force killing remaining processes count=1
+(APIServer pid=200194) WARNING 10-20 23:58:23 [utils.py:637] [shutdown] Process manager: force killing remaining process EngineCore pid 200493
+(EngineCore pid=200493) INFO 10-20 23:58:23 [core.py:1332] [shutdown] EngineCore: trigger received signal=SIGTERM
+(EngineCore pid=200493) INFO 10-20 23:58:23 [core.py:1468] [shutdown] EngineCore: start mode=abort timeout=0s
+(EngineCore pid=200493) INFO 10-20 23:58:23 [core.py:1499] [shutdown] EngineCore: request processing complete; starting resource teardown
+(EngineCore pid=200493) INFO 10-20 23:58:23 [core.py:1345] [shutdown] EngineCore: exiting busy loop
+(APIServer pid=200194) INFO 10-20 23:58:23 [core_client.py:690] [shutdown] MPClient: engine manager stopped
+(APIServer pid=200194) INFO 10-20 23:58:23 [core_client.py:691] [shutdown] MPClient: cleaning up background resources
+(APIServer pid=200194) INFO 10-20 23:58:23 [core_client.py:693] [shutdown] MPClient: complete
+(APIServer pid=200194) INFO 10-20 23:58:23 [launcher.py:137] [shutdown] API server: engine client stopped
+(APIServer pid=200194) INFO 10-20 23:58:23 [launcher.py:140] [shutdown] API server: signalling HTTP server shutdown
+(APIServer pid=200194) ERROR:    Traceback (most recent call last):
+(APIServer pid=200194)   File "/home/stone/miniconda3/envs/office-ai/lib/python3.12/site-packages/vllm/entrypoints/launcher.py", line 149, in serve_http
+(APIServer pid=200194)     await server_task
+(APIServer pid=200194)   File "/home/stone/miniconda3/envs/office-ai/lib/python3.12/site-packages/uvicorn/server.py", line 90, in serve
+(APIServer pid=200194)     await self._serve(sockets)
+(APIServer pid=200194)   File "/home/stone/miniconda3/envs/office-ai/lib/python3.12/site-packages/uvicorn/server.py", line 107, in _serve
+(APIServer pid=200194)     await self.main_loop()
+(APIServer pid=200194)   File "/home/stone/miniconda3/envs/office-ai/lib/python3.12/site-packages/uvicorn/server.py", line 248, in main_loop
+(APIServer pid=200194)     await asyncio.sleep(0.1)
+(APIServer pid=200194)   File "/home/stone/miniconda3/envs/office-ai/lib/python3.12/asyncio/tasks.py", line 665, in sleep
+(APIServer pid=200194)     return await future
+(APIServer pid=200194)            ^^^^^^^^^^^^
+(APIServer pid=200194) asyncio.exceptions.CancelledError
+(APIServer pid=200194) 
+(APIServer pid=200194) During handling of the above exception, another exception occurred:
+(APIServer pid=200194) 
+(APIServer pid=200194) Traceback (most recent call last):
+(APIServer pid=200194)   File "/home/stone/miniconda3/envs/office-ai/lib/python3.12/asyncio/runners.py", line 195, in run
+(APIServer pid=200194)     return runner.run(main)
+(APIServer pid=200194)            ^^^^^^^^^^^^^^^^
+(APIServer pid=200194)   File "/home/stone/miniconda3/envs/office-ai/lib/python3.12/asyncio/runners.py", line 118, in run
+(APIServer pid=200194)     return self._loop.run_until_complete(task)
+(APIServer pid=200194)            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(APIServer pid=200194)   File "uvloop/loop.pyx", line 1509, in uvloop.loop.Loop.run_until_complete
+(APIServer pid=200194)   File "uvloop/loop.pyx", line 1502, in uvloop.loop.Loop.run_until_complete
+(APIServer pid=200194)   File "uvloop/loop.pyx", line 1371, in uvloop.loop.Loop.run_forever
+(APIServer pid=200194)   File "uvloop/loop.pyx", line 551, in uvloop.loop.Loop._run
+(APIServer pid=200194)   File "uvloop/loop.pyx", line 471, in uvloop.loop.Loop._on_idle
+(APIServer pid=200194)   File "uvloop/cbhandles.pyx", line 86, in uvloop.loop.Handle._run
+(APIServer pid=200194)   File "uvloop/cbhandles.pyx", line 66, in uvloop.loop.Handle._run
+(APIServer pid=200194)   File "/home/stone/miniconda3/envs/office-ai/lib/python3.12/site-packages/uvloop/__init__.py", line 48, in wrapper
+(APIServer pid=200194)     return await main
+(APIServer pid=200194)            ^^^^^^^^^^
+(APIServer pid=200194)   File "/home/stone/miniconda3/envs/office-ai/lib/python3.12/site-packages/vllm/entrypoints/openai/api_server.py", line 764, in run_server
+(APIServer pid=200194)     await run_server_worker(listen_address, sock, args, **uvicorn_kwargs)
+(APIServer pid=200194)   File "/home/stone/miniconda3/envs/office-ai/lib/python3.12/site-packages/vllm/entrypoints/openai/api_server.py", line 782, in run_server_worker
+(APIServer pid=200194)     shutdown_task = await build_and_serve(
+(APIServer pid=200194)                     ^^^^^^^^^^^^^^^^^^^^^^
+(APIServer pid=200194)   File "/home/stone/miniconda3/envs/office-ai/lib/python3.12/site-packages/vllm/entrypoints/openai/api_server.py", line 684, in build_and_serve
+(APIServer pid=200194)     return await serve_http(
+(APIServer pid=200194)            ^^^^^^^^^^^^^^^^^
+(APIServer pid=200194)   File "/home/stone/miniconda3/envs/office-ai/lib/python3.12/site-packages/vllm/entrypoints/launcher.py", line 153, in serve_http
+(APIServer pid=200194)     process = find_process_using_port(port)
+(APIServer pid=200194)               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(APIServer pid=200194)   File "/home/stone/miniconda3/envs/office-ai/lib/python3.12/site-packages/vllm/utils/network_utils.py", line 233, in find_process_using_port
+(APIServer pid=200194)     for conn in psutil.net_connections():
+(APIServer pid=200194)                 ^^^^^^^^^^^^^^^^^^^^^^^^
+(APIServer pid=200194)   File "/home/stone/miniconda3/envs/office-ai/lib/python3.12/site-packages/psutil/__init__.py", line 2225, in net_connections
+(APIServer pid=200194)     return _psplatform.net_connections(kind)
+(APIServer pid=200194)            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(APIServer pid=200194)   File "/home/stone/miniconda3/envs/office-ai/lib/python3.12/site-packages/psutil/_pslinux.py", line 942, in net_connections
+(APIServer pid=200194)     return _net_connections.retrieve(kind)
+(APIServer pid=200194)            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(APIServer pid=200194)   File "/home/stone/miniconda3/envs/office-ai/lib/python3.12/site-packages/psutil/_pslinux.py", line 916, in retrieve
+(APIServer pid=200194)     inodes = self.get_all_inodes()
+(APIServer pid=200194)              ^^^^^^^^^^^^^^^^^^^^^
+(APIServer pid=200194)   File "/home/stone/miniconda3/envs/office-ai/lib/python3.12/site-packages/psutil/_pslinux.py", line 766, in get_all_inodes
+(APIServer pid=200194)     inodes.update(self.get_proc_inodes(pid))
+(APIServer pid=200194)                   ^^^^^^^^^^^^^^^^^^^^^^^^^
+(APIServer pid=200194)   File "/home/stone/miniconda3/envs/office-ai/lib/python3.12/site-packages/psutil/_pslinux.py", line 740, in get_proc_inodes
+(APIServer pid=200194)     inode = readlink(f"{self._procfs_path}/{pid}/fd/{fd}")
+(APIServer pid=200194)             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(APIServer pid=200194)   File "/home/stone/miniconda3/envs/office-ai/lib/python3.12/site-packages/psutil/_pslinux.py", line 152, in readlink
+(APIServer pid=200194)     path = os.readlink(path)
+(APIServer pid=200194)            ^^^^^^^^^^^^^^^^^
+(APIServer pid=200194)   File "/home/stone/miniconda3/envs/office-ai/lib/python3.12/site-packages/vllm/entrypoints/openai/api_server.py", line 759, in _interrupt_init
+(APIServer pid=200194)     raise KeyboardInterrupt("terminated")
+(APIServer pid=200194) KeyboardInterrupt: terminated
+(APIServer pid=200194) 
+(APIServer pid=200194) During handling of the above exception, another exception occurred:
+(APIServer pid=200194) 
+(APIServer pid=200194) Traceback (most recent call last):
+(APIServer pid=200194)   File "/home/stone/miniconda3/envs/office-ai/lib/python3.12/site-packages/starlette/routing.py", line 661, in lifespan
+(APIServer pid=200194)     await receive()
+(APIServer pid=200194)   File "/home/stone/miniconda3/envs/office-ai/lib/python3.12/site-packages/uvicorn/lifespan/on.py", line 137, in receive
+(APIServer pid=200194)     return await self.receive_queue.get()
+(APIServer pid=200194)            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(APIServer pid=200194)   File "/home/stone/miniconda3/envs/office-ai/lib/python3.12/asyncio/queues.py", line 158, in get
+(APIServer pid=200194)     await getter
+(APIServer pid=200194) asyncio.exceptions.CancelledError
+(APIServer pid=200194) 
+(APIServer pid=200194) Traceback (most recent call last):
+(APIServer pid=200194)   File "/home/stone/miniconda3/envs/office-ai/lib/python3.12/site-packages/vllm/entrypoints/launcher.py", line 149, in serve_http
+(APIServer pid=200194)     await server_task
+(APIServer pid=200194)   File "/home/stone/miniconda3/envs/office-ai/lib/python3.12/site-packages/uvicorn/server.py", line 90, in serve
+(APIServer pid=200194)     await self._serve(sockets)
+(APIServer pid=200194)   File "/home/stone/miniconda3/envs/office-ai/lib/python3.12/site-packages/uvicorn/server.py", line 107, in _serve
+(APIServer pid=200194)     await self.main_loop()
+(APIServer pid=200194)   File "/home/stone/miniconda3/envs/office-ai/lib/python3.12/site-packages/uvicorn/server.py", line 248, in main_loop
+(APIServer pid=200194)     await asyncio.sleep(0.1)
+(APIServer pid=200194)   File "/home/stone/miniconda3/envs/office-ai/lib/python3.12/asyncio/tasks.py", line 665, in sleep
+(APIServer pid=200194)     return await future
+(APIServer pid=200194)            ^^^^^^^^^^^^
+(APIServer pid=200194) asyncio.exceptions.CancelledError
+(APIServer pid=200194) 
+(APIServer pid=200194) During handling of the above exception, another exception occurred:
+(APIServer pid=200194) 
+(APIServer pid=200194) Traceback (most recent call last):
+(APIServer pid=200194)   File "/home/stone/miniconda3/envs/office-ai/bin/vllm", line 6, in <module>
+(APIServer pid=200194)     sys.exit(main())
+(APIServer pid=200194)              ^^^^^^
+(APIServer pid=200194)   File "/home/stone/miniconda3/envs/office-ai/lib/python3.12/site-packages/vllm/entrypoints/cli/main.py", line 97, in main
+(APIServer pid=200194)     args.dispatch_function(args)
+(APIServer pid=200194)   File "/home/stone/miniconda3/envs/office-ai/lib/python3.12/site-packages/vllm/entrypoints/cli/serve.py", line 152, in cmd
+(APIServer pid=200194)     uvloop.run(run_server(args))
+(APIServer pid=200194)   File "/home/stone/miniconda3/envs/office-ai/lib/python3.12/site-packages/uvloop/__init__.py", line 96, in run
+(APIServer pid=200194)     return __asyncio.run(
+(APIServer pid=200194)            ^^^^^^^^^^^^^^
+(APIServer pid=200194)   File "/home/stone/miniconda3/envs/office-ai/lib/python3.12/asyncio/runners.py", line 195, in run
+(APIServer pid=200194)     return runner.run(main)
+(APIServer pid=200194)            ^^^^^^^^^^^^^^^^
+(APIServer pid=200194)   File "/home/stone/miniconda3/envs/office-ai/lib/python3.12/asyncio/runners.py", line 118, in run
+(APIServer pid=200194)     return self._loop.run_until_complete(task)
+(APIServer pid=200194)            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(APIServer pid=200194)   File "uvloop/loop.pyx", line 1509, in uvloop.loop.Loop.run_until_complete
+(APIServer pid=200194)   File "uvloop/loop.pyx", line 1502, in uvloop.loop.Loop.run_until_complete
+(APIServer pid=200194)   File "uvloop/loop.pyx", line 1371, in uvloop.loop.Loop.run_forever
+(APIServer pid=200194)   File "uvloop/loop.pyx", line 551, in uvloop.loop.Loop._run
+(APIServer pid=200194)   File "uvloop/loop.pyx", line 471, in uvloop.loop.Loop._on_idle
+(APIServer pid=200194)   File "uvloop/cbhandles.pyx", line 86, in uvloop.loop.Handle._run
+(APIServer pid=200194)   File "uvloop/cbhandles.pyx", line 66, in uvloop.loop.Handle._run
+(APIServer pid=200194)   File "/home/stone/miniconda3/envs/office-ai/lib/python3.12/site-packages/uvloop/__init__.py", line 48, in wrapper
+(APIServer pid=200194)     return await main
+(APIServer pid=200194)            ^^^^^^^^^^
+(APIServer pid=200194)   File "/home/stone/miniconda3/envs/office-ai/lib/python3.12/site-packages/vllm/entrypoints/openai/api_server.py", line 764, in run_server
+(APIServer pid=200194)     await run_server_worker(listen_address, sock, args, **uvicorn_kwargs)
+(APIServer pid=200194)   File "/home/stone/miniconda3/envs/office-ai/lib/python3.12/site-packages/vllm/entrypoints/openai/api_server.py", line 782, in run_server_worker
+(APIServer pid=200194)     shutdown_task = await build_and_serve(
+(APIServer pid=200194)                     ^^^^^^^^^^^^^^^^^^^^^^
+(APIServer pid=200194)   File "/home/stone/miniconda3/envs/office-ai/lib/python3.12/site-packages/vllm/entrypoints/openai/api_server.py", line 684, in build_and_serve
+(APIServer pid=200194)     return await serve_http(
+(APIServer pid=200194)            ^^^^^^^^^^^^^^^^^
+(APIServer pid=200194)   File "/home/stone/miniconda3/envs/office-ai/lib/python3.12/site-packages/vllm/entrypoints/launcher.py", line 153, in serve_http
+(APIServer pid=200194)     process = find_process_using_port(port)
+(APIServer pid=200194)               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(APIServer pid=200194)   File "/home/stone/miniconda3/envs/office-ai/lib/python3.12/site-packages/vllm/utils/network_utils.py", line 233, in find_process_using_port
+(APIServer pid=200194)     for conn in psutil.net_connections():
+(APIServer pid=200194)                 ^^^^^^^^^^^^^^^^^^^^^^^^
+(APIServer pid=200194)   File "/home/stone/miniconda3/envs/office-ai/lib/python3.12/site-packages/psutil/__init__.py", line 2225, in net_connections
+(APIServer pid=200194)     return _psplatform.net_connections(kind)
+(APIServer pid=200194)            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(APIServer pid=200194)   File "/home/stone/miniconda3/envs/office-ai/lib/python3.12/site-packages/psutil/_pslinux.py", line 942, in net_connections
+(APIServer pid=200194)     return _net_connections.retrieve(kind)
+(APIServer pid=200194)            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(APIServer pid=200194)   File "/home/stone/miniconda3/envs/office-ai/lib/python3.12/site-packages/psutil/_pslinux.py", line 916, in retrieve
+(APIServer pid=200194)     inodes = self.get_all_inodes()
+(APIServer pid=200194)              ^^^^^^^^^^^^^^^^^^^^^
+(APIServer pid=200194)   File "/home/stone/miniconda3/envs/office-ai/lib/python3.12/site-packages/psutil/_pslinux.py", line 766, in get_all_inodes
+(APIServer pid=200194)     inodes.update(self.get_proc_inodes(pid))
+(APIServer pid=200194)                   ^^^^^^^^^^^^^^^^^^^^^^^^^
+(APIServer pid=200194)   File "/home/stone/miniconda3/envs/office-ai/lib/python3.12/site-packages/psutil/_pslinux.py", line 740, in get_proc_inodes
+(APIServer pid=200194)     inode = readlink(f"{self._procfs_path}/{pid}/fd/{fd}")
+(APIServer pid=200194)             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+(APIServer pid=200194)   File "/home/stone/miniconda3/envs/office-ai/lib/python3.12/site-packages/psutil/_pslinux.py", line 152, in readlink
+(APIServer pid=200194)     path = os.readlink(path)
+(APIServer pid=200194)            ^^^^^^^^^^^^^^^^^
+(APIServer pid=200194)   File "/home/stone/miniconda3/envs/office-ai/lib/python3.12/site-packages/vllm/entrypoints/openai/api_server.py", line 759, in _interrupt_init
+(APIServer pid=200194)     raise KeyboardInterrupt("terminated")
+(APIServer pid=200194) KeyboardInterrupt: terminated
+/home/stone/miniconda3/envs/office-ai/lib/python3.12/multiprocessing/resource_tracker.py:279: UserWarning: resource_tracker: There appear to be 1 leaked semaphore objects to clean up at shutdown
+  warnings.warn('resource_tracker: There appear to be %d '

@@ -1,0 +1,21 @@
+2026-10-20 23:18:53,550 [INFO] download models from model hub: ms
+2026-10-20 23:18:53,567 [WARNING] trust_remote_code: False
+2026-10-20 23:18:54,823 [INFO] Loading pretrained params from /home/stone/llm_project/imouto_v2/imoto/models/SenseVoiceSmall/model.pt
+2026-10-20 23:18:54,827 [INFO] ckpt: /home/stone/llm_project/imouto_v2/imoto/models/SenseVoiceSmall/model.pt
+2026-10-20 23:18:56,816 [INFO] scope_map: ['module.', 'None']
+2026-10-20 23:18:56,816 [INFO] excludes: None
+2026-10-20 23:18:56,886 [INFO] Loading ckpt: /home/stone/llm_project/imouto_v2/imoto/models/SenseVoiceSmall/model.pt, status: <All keys matched successfully>
+INFO:     Started server process [200970]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8001 (Press CTRL+C to quit)
+funasr version: 1.4.16.
+INFO:     127.0.0.1:60710 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60710 - "GET /favicon.ico HTTP/1.1" 404 Not Found
+  0%|[34m          [0m| 0/1 [00:00<?, ?it/s]100%|[34m██████████[0m| 1/1 [00:00<00:00,  1.30it/s]{'load_data': '0.234', 'extract_feat': '0.094', 'forward': '0.769', 'batch_size': '1', 'rtf': '0.176'}, : 100%|[34m██████████[0m| 1/1 [00:00<00:00,  1.30it/s]rtf_avg: 0.176: 100%|[34m██████████[0m| 1/1 [00:00<00:00,  1.30it/s]                                                                                          rtf_avg: 0.176: 100%|[34m██████████[0m| 1/1 [00:00<00:00,  1.30it/s]
+2026-10-20 23:38:04,989 [INFO] HTTP Request: POST http://127.0.0.1:8000/v1/chat/completions "HTTP/1.1 200 OK"
+INFO:     127.0.0.1:35792 - "POST /recognize HTTP/1.1" 200 OK
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [200970]
